@@ -61,11 +61,14 @@ For this question you’ll need to use SQL. Follow [this link](https://www.w3sch
 3. What product was ordered the most by customers in Germany?
 
     ```
-    SELECT Products.ProductName, SUM(Quantity) AS TotalQuantity
-    FROM Orders, OrderDetails, Customers, Products
-    WHERE Customers.Country = "Germany" AND OrderDetails.OrderID = Orders.OrderID AND OrderDetails.ProductID = Products.ProductID AND Customers.CustomerID = Orders.CustomerID
-    GROUP BY Products.ProductID
-    ORDER BY TotalQuantity DESC
+    SELECT Products.ProductName, SUM(OrderDetails.Quantity) AS TotalOrderAmount
+    FROM Products
+    JOIN OrderDetails ON OrderDetails.ProductID = Products.ProductID
+    JOIN Orders ON Orders.OrderID = OrderDetails.OrderID
+    JOIN Customers ON Customers.CustomerID = Orders.CustomerID
+    WHERE Customers.Country = "Germany"
+    GROUP BY Products.ProductName
+    ORDER BY SUM(OrderDetails.Quantity) DESC
     LIMIT 1;
     ```
     Boston Crab Meat: 160
